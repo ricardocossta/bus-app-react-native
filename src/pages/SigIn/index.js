@@ -1,8 +1,13 @@
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native'
-import React from 'react'
-import Ionicons from 'react-native-vector-icons/Ionicons'
+import React, {useState} from 'react'
+import SocialButton from '../../components/SocialButton'
+import DefaultButton from '../../components/DefaultButton'
 
 export default function SigIn() {
+
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+
     return (
         <View style={styles.container}>
             <View style={styles.containerImage}>
@@ -14,23 +19,14 @@ export default function SigIn() {
             </View>
             <View style={styles.containerLogin}>
                 <Text style={styles.loginText}>Login</Text>
-                <TextInput placeholder='Email ID' style={styles.input}></TextInput>
-                <TextInput placeholder='Senha' style={styles.input}></TextInput>
-
-                <TouchableOpacity style={styles.btnLoggin}>
-                    <Text style={styles.btnText}>Login</Text>
-                </TouchableOpacity>
+                <TextInput placeholder='Email ID' style={styles.input} value={email} onChangeText={setEmail}></TextInput>
+                <TextInput secureTextEntry={true} placeholder='Senha' style={styles.input} value={password} onChangeText={setPassword}></TextInput>
+                <DefaultButton name='Entrar'/>
                 <Text style={styles.loginWithText}>Ou logue com...</Text>
                 <View style={styles.containerSocial}>
-                    <TouchableOpacity style={styles.btnSocial}>
-                        <Ionicons name='logo-google' size={30}/>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.btnSocial}>
-                        <Ionicons name='logo-facebook' size={30}/>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.btnSocial}>
-                        <Ionicons name='logo-apple' size={30}/>
-                    </TouchableOpacity>
+                    <SocialButton name='logo-google'/>
+                    <SocialButton name='logo-facebook'/>
+                    <SocialButton name='logo-apple'/>
                 </View>
             </View>
         </View>
@@ -59,7 +55,7 @@ const styles = StyleSheet.create({
     loginText: {
         fontSize: 32,
         fontWeight: 'bold',
-        marginBottom: 22
+        marginBottom: 22,
     },
 
     input: {
@@ -68,22 +64,7 @@ const styles = StyleSheet.create({
         padding: '5%',
         borderBottomWidth: 1.5,   
     },
-
-    btnLoggin: {
-        backgroundColor: '#e63946',
-        borderRadius: 15,
-        height: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: '10%',
-    },
-
-    btnText: {
-        color: '#fff',
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
-
+    
     loginWithText: {
         fontSize: 14,
         textAlign: 'center',
@@ -95,14 +76,4 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         marginTop: '10%',
     },
-
-    btnSocial: {
-        backgroundColor: '#fff',
-        width: 80,
-        height: 50,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderWidth: 1,
-        borderRadius: 15,
-    }
 })
