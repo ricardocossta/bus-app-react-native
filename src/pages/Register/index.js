@@ -59,9 +59,8 @@ const styles = StyleSheet.create({
     },
 
     input: {
-        backgroundColor: '#fff',
-        borderRadius: 10,
-        padding: '5%',
+        paddingTop: 40,
+        paddingLeft: '5%',
         borderBottomWidth: 1,   
     },
 })
