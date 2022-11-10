@@ -3,18 +3,18 @@ import React from 'react'
 
 export default function Card(props) {
   return (
-    <View style={styles.content}>
+    <View style={styles.container}>
         <View style={styles.containerCardNumber}>
             <Text style={styles.cardNumber}>{props.number}</Text>
         </View>
         <View style={styles.containerCardInfos}>
             <View style={styles.cardName}>
-                <Text style={styles.titlename}>{props.name ? 'Nome' : ''}</Text>
+                {props.name ? <Text style={styles.titlename}>Nome</Text> : false}
                 <Text style={styles.textName}>{props.name}</Text>
             </View>
             <View style={styles.cardDueDate}>
-                <Text style={styles.titleDueDate}>{props.validity ? 'Vencimento' : ''}</Text>
-                <Text style={styles.textDueDate}>{props.validity}</Text>
+                {props.validity ? <Text style={styles.titlename}>Vencimento</Text> : false}
+                <Text style={styles.textDueDate}>{props.dueDate}</Text>
             </View>
         </View>
     </View>
@@ -22,7 +22,7 @@ export default function Card(props) {
 }
 
 const styles = StyleSheet.create({
-    content: {
+    container: {
         width: '100%',
         height: 230,
         backgroundColor: '#2C363F',
