@@ -15,11 +15,11 @@ export default function SigIn() {
 
     async function logIn() {
         try {
-            const dados = await api.get('/user.json')
-            const data = dados.data
+            const response = await api.get('/user.json')
+            const data = response.data
             const user = Object.values(data).filter(user => user.email === email && user.password === password)
             if(user.length > 0) {
-                navigation.navigate('AddPayment')
+                navigation.navigate('Home')
             } else {
                 alert('Usuário não encontrado!')
             }
