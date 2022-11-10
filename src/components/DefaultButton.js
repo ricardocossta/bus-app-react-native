@@ -3,7 +3,11 @@ import React from 'react'
 
 export default function DefaultButton(props) {
   return (
-    <TouchableOpacity style={styles.btnRegister}>
+    <TouchableOpacity style={styles.btnRegister} onPress={
+      () => {
+        props.onPress()
+      }
+    }>
         <Text style={styles.btnText}>{props.name}</Text>
     </TouchableOpacity>
   )

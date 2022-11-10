@@ -1,8 +1,41 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native'
+import { View, Text, StyleSheet, TextInput, Image, SafeAreaView } from 'react-native'
 import React, {useState} from 'react'
 import DefaultButton from '../../components/DefaultButton'
+import axios from 'axios'
+
+const api = axios.create({
+    baseURL: 'https://bus-app-challenge-default-rtdb.firebaseio.com/'
+})
 
 export default function Register() {
+
+    function save() {
+        if (name === '' || email === '' || password === '' || age === '' || cpf === '') {
+            alert('Preencha todos os campos!')
+        } else {
+            api.post('/user.json', {
+                name: name,
+                email: email,
+                password: password,
+                age: age,
+                cpf: cpf,
+            })
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+            .finally(() => {
+                setAge('')
+                setCpf('')
+                setEmail('')
+                setName('')
+                setPassword('')
+                alert('Cadastro realizado com sucesso!')
+            })
+        }
+    }
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -11,12 +44,12 @@ export default function Register() {
     const [age, setAge] = useState("")
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <View style={styles.containerImage}>
                 <Image
                     source={require('../../assets/bus-station.png')}
                     style={{width: '90%', height: '80%', borderRadius: 10}}
-                    resizeMode="contain"
+                    resizeMode="cover"
                 />
             </View>
             <View style={styles.containerRegister}>
@@ -27,9 +60,9 @@ export default function Register() {
                 <TextInput placeholder='CPF' style={styles.input} value={cpf} onChangeText={setCpf}></TextInput>
                 <TextInput secureTextEntry={true} placeholder='Senha' style={styles.input} value={password} onChangeText={setPassword}></TextInput>
                 
-                <DefaultButton name='Cadastrar'/>
+                <DefaultButton name='Cadastrar' onPress={save}/>
             </View>
-        </View>
+        </SafeAreaView>
     )
 }
 
@@ -41,6 +74,7 @@ const styles = StyleSheet.create({
     },
 
     containerImage: {
+        paddingTop: 30,
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',

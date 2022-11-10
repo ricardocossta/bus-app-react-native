@@ -1,15 +1,40 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native'
+import { View, Text, StyleSheet, TextInput, Image, SafeAreaView } from 'react-native'
 import React, {useState} from 'react'
+import { useNavigation } from '@react-navigation/core'
 import SocialButton from '../../components/SocialButton'
 import DefaultButton from '../../components/DefaultButton'
+import axios from 'axios'
+
+const api = axios.create({
+    baseURL: 'https://bus-app-challenge-default-rtdb.firebaseio.com/'
+})
 
 export default function SigIn() {
+
+    const navigation = useNavigation()
+
+    async function logIn() {
+        try {
+            const dados = await api.get('/user.json')
+            const data = dados.data
+            const user = Object.values(data).filter(user => user.email === email && user.password === password)
+            if(user.length > 0) {
+                navigation.navigate('AddPayment')
+            } else {
+                alert('Usuário não encontrado!')
+            }
+        }
+        catch(err) {
+            console.log(err);
+        }
+    
+    }
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <View style={styles.containerImage}>
                 <Image
                     source={require('../../assets/bus-stop.png')}
@@ -21,7 +46,7 @@ export default function SigIn() {
                 <Text style={styles.loginText}>Login</Text>
                 <TextInput placeholder='Email ID' style={styles.input} value={email} onChangeText={setEmail}></TextInput>
                 <TextInput secureTextEntry={true} placeholder='Senha' style={styles.input} value={password} onChangeText={setPassword}></TextInput>
-                <DefaultButton name='Entrar'/>
+                <DefaultButton name='Entrar' onPress={logIn}/>
                 <Text style={styles.loginWithText}>Ou logue com...</Text>
                 <View style={styles.containerSocial}>
                     <SocialButton name='logo-google'/>
@@ -29,7 +54,7 @@ export default function SigIn() {
                     <SocialButton name='logo-apple'/>
                 </View>
             </View>
-        </View>
+        </SafeAreaView>
     )
 }
 
