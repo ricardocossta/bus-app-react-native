@@ -7,33 +7,36 @@ import axios from 'axios'
 
 import { AuthContext } from '../../context/context'
 
-const api = axios.create({
-    baseURL: 'https://bus-app-challenge-default-rtdb.firebaseio.com/'
+const autApi = axios.create({
+    baseURL: 'https://identitytoolkit.googleapis.com/v1'
 })
 
 export default function SigIn() {
 
-    async function logIn() {
-        try {
-            const response = await api.get('/user.json')
-            const data = response.data
-            const user = Object.values(data).filter(user => user.email === email && user.password === password)
-            if(user.length > 0) {
-                setUser(user[0])
-                navigation.navigate('Home')
-            } else {
-                alert('Usuário não encontrado!')
-            }
-        }
-        catch(err) {
-            console.log(err);
-        }
-    }
-
     const navigation = useNavigation()
-    const {setUser} = useContext(AuthContext)
+    const {setToken, API_KEY, setUserId, setUserName} = useContext(AuthContext)
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+
+    function logIn() {
+        autApi.post(`/accounts:signInWithPassword?key=${API_KEY}`, {
+            email,
+            password,
+            returnSecureToken: true
+        })
+        .then(res => {
+            setToken(res.data.idToken)
+            setUserId(res.data.localId)
+            setUserName(res.data.displayName)
+            navigation.navigate('Home')
+        })
+        .catch(err => {
+            alert('Login inválido')
+            setToken(null)
+            setUserId(null)
+            setUserName(null)
+        })
+    }
 
     return (
         <SafeAreaView style={styles.container}>

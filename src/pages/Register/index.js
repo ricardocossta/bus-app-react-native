@@ -5,52 +5,43 @@ import axios from 'axios'
 
 import { AuthContext } from '../../context/context'
 
-const api = axios.create({
+const autApi = axios.create({
     baseURL: 'https://identitytoolkit.googleapis.com/v1'
 })
 
 export default function Register() {
 
+    const {API_KEY} = useContext(AuthContext)
+    const [email, setEmail] = useState("")
+    const [name, setName] = useState("")
+    const [password, setPassword] = useState("")
+    
     function newUser() {
-        if (name === '' || email === '' || password === '' || age === '' || cpf === '') {
+        if (email === '' || password === '' ) {
             alert('Preencha todos os campos!')
         } else {
-            api.post(`/accounts:signUp?key=${API_KEY}`, {
-                name: name,
+            autApi.post(`/accounts:signUp?key=${API_KEY}`, {
                 email: email,
                 password: password,
-                age: age,
-                cpf: cpf,
+                displayName: name,
                 returnSecureToken: true
             })
             .then(res => {
-                console.log(res)
-                setToken(res.data.idToken)
-                alert('Cadastro realizado com sucesso!') 
+                console.warn(res.data)
+                alert('Usuário cadastrado com sucesso!')
             })
             .catch(err => {
-                console.log(err)
-                setToken(null)
-                alert('Ocorreu um erro no cadastro!')
+                console.warn(err)
+                alert('Erro ao cadastrar usuário!')
+                
             })
             .finally(() => {
-                setAge('')
-                setCpf('')
                 setEmail('')
-                setName('')
                 setPassword('')
             })
         }
     }
-
-    const {API_KEY} = useContext(AuthContext)
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const [name, setName] = useState("")
-    const [cpf, setCpf] = useState("")
-    const [age, setAge] = useState("")
-    const [token, setToken] = useState(null)
-
+    
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.containerImage}>
@@ -62,10 +53,8 @@ export default function Register() {
             </View>
             <View style={styles.containerRegister}>
                 <Text style={styles.registerText}>Cadastro</Text>
-                <TextInput placeholder='Nome completo' style={styles.input} value={name} onChangeText={setName}></TextInput>
-                <TextInput placeholder='Idade' style={styles.input} value={age} onChangeText={setAge}></TextInput>
                 <TextInput placeholder='Email' style={styles.input} value={email} onChangeText={setEmail}></TextInput>
-                <TextInput placeholder='CPF' style={styles.input} value={cpf} onChangeText={setCpf}></TextInput>
+                <TextInput placeholder='Nome completo' style={styles.input} value={name} onChangeText={setName}></TextInput>
                 <TextInput secureTextEntry={true} placeholder='Senha' style={styles.input} value={password} onChangeText={setPassword}></TextInput>
                 
                 <DefaultButton name='Cadastrar' onPress={newUser}/>
