@@ -13,11 +13,16 @@ const api = axios.create({
 export default function Home() {
 
     const navigation = useNavigation();
-    const {token, userId, userName} = useContext(AuthContext)
+    const {token, userId, userName, setCardNumber, setCardName, setDueDate, setCvv, setCardId} = useContext(AuthContext)
     const [cardList, setCardList] = useState([])
 
     function navigateToAddPayment() {
         navigation.navigate('AddPayment')
+        setCardNumber("")
+        setCardName("")
+        setDueDate("")
+        setCvv("")
+        setCardId(null)
     }
 
     async function getCardByUser() {
@@ -45,11 +50,20 @@ export default function Home() {
         })
     }
 
+    function editCard(props) {
+        navigateToAddPayment()
+        setCardId(props.id)
+        setCardNumber(props.cardNumber)
+        setCardName(props.cardName)
+        setDueDate(props.dueDate)
+        setCvv(props.cvv)
+    }   
+
     function Item(props) {
         return (
-            <TouchableOpacity style={styles.cardContainer} >
+            <TouchableOpacity style={styles.cardContainer} onPress={() => editCard(props.item)}>
                 <Text style={styles.cardText}>{props.item.cardNumber}</Text>
-                <Text style={styles.cardText}>{props.item.nameUser}</Text>
+                <Text style={styles.cardText}>{props.item.cardName}</Text>
                 <Text style={styles.cardText}>{props.item.dueDate}</Text>
                 <Text style={styles.cardText}>{props.item.cvv}</Text>
                 <TouchableOpacity style={styles.button} onPress={

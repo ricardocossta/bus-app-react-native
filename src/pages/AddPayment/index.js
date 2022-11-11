@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet, TextInput } from 'react-native'
-import React, { useState, useContext } from 'react'
+import { View, StyleSheet, TextInput } from 'react-native'
+import React, {useContext } from 'react'
 import Card from '../../components/Card'
 import DefaultButton from '../../components/DefaultButton'
 import { useNavigation } from '@react-navigation/core'
@@ -14,46 +14,72 @@ const api = axios.create({
 export default function AddPayment() {
 
     const navigation = useNavigation();
-    const {token, userId, userName} = useContext(AuthContext)
-    const [cardNumber, setCardNumber, ] = useState("")
-    const [name, setName] = useState("")
-    const [dueDate, setDueDate] = useState("")
-    const [cvv, setCvv] = useState("")
+    const {token, userId, userName, cardNumber, setCardNumber, cardName, setCardName, dueDate, setDueDate, cvv, setCvv, cardId} = useContext(AuthContext)
 
     function addCard() {
-        if (cardNumber === '' || name === '' || dueDate === '' || cvv === '') {
+        if (cardNumber === '' || cardName === '' || dueDate === '' || cvv === '') {
             alert('Preencha todos os campos!')
         } else {
-            api.post(`/card.json?auth=${token}`, {	
-                idUser: userId,
-                nameUser: userName,
-                cardNumber: cardNumber,
-                cardName: name,
-                dueDate: dueDate,
-                cvv: cvv
-            })
-            .then(() => {
-                alert('Cartão adicionado com sucesso!')
-                navigation.navigate('Home')
-            })
-            .catch(() => {
-                alert('Erro ao adicionar cartão!')
-            })
+            if (cardId === null) {
+                api.post(`/card.json?auth=${token}`, {	
+                    idUser: userId,
+                    nameUser: userName,
+                    cardNumber: cardNumber,
+                    cardName: cardName,
+                    dueDate: dueDate,
+                    cvv: cvv
+                })
+                .then(() => {
+                    alert('Cartão adicionado com sucesso!')
+                    navigation.navigate('Home')
+                })
+                .catch(() => {
+                    alert('Erro ao adicionar cartão!')
+                })
+                .finally(() => {
+                    setCardNumber('')
+                    setCardName('')
+                    setDueDate('')
+                    setCvv('')
+                })
+            } else {
+                api.put(`/card/${cardId}.json?auth=${token}`, {	
+                    idUser: userId,
+                    nameUser: userName,
+                    cardNumber: cardNumber,
+                    cardName: cardName,
+                    dueDate: dueDate,
+                    cvv: cvv
+                })
+                .then(() => {
+                    alert('Cartão editado com sucesso!')
+                    navigation.navigate('Home')
+                })
+                .catch(() => {
+                    alert('Erro ao editar cartão!')
+                })
+                .finally(() => {
+                    setCardNumber('')
+                    setCardName('')
+                    setDueDate('')
+                    setCvv('')
+                })
+            }
         }
     }
 
     return (
     <View style={styles.container}>
         <View style={styles.creditCardContainer}>
-            <Card number={cardNumber} name={name} dueDate={dueDate} cvv={cvv}/>   
+            <Card number={cardNumber} name={cardName} dueDate={dueDate} cvv={cvv}/>   
         </View>
         <View style={styles.formContainer}>
             <View style={styles.form}>
-                <TextInput placeholder='Nome' style={styles.input} value={name} onChangeText={setName}></TextInput>
+                <TextInput placeholder='Nome' style={styles.input} value={cardName} onChangeText={setCardName}></TextInput>
                 <TextInput placeholder='Numero de cartão' style={styles.input} value={cardNumber} onChangeText={setCardNumber}></TextInput>
                 <TextInput placeholder='Validade' style={styles.input} value={dueDate} onChangeText={setDueDate}></TextInput>
                 <TextInput placeholder='CVV' style={styles.input} value={cvv} onChangeText={setCvv}></TextInput>
-                <DefaultButton name='Salvar' onPress={addCard}/>
+                <DefaultButton name={cardId === null ? 'Adcionar Cartão' : 'Editar Cartão'} onPress={addCard}/>
             </View>
         </View>
     </View>
