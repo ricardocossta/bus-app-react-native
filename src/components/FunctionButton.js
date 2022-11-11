@@ -4,36 +4,31 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 
 export default function FunctionButton(props) {
   return (
-    <View style={styles.containerButton}>
-        <TouchableOpacity style={styles.buttonIcon} onPress={props.onPress}>
-            <Ionicons name={props.name} size={32} color='white'></Ionicons>
-        </TouchableOpacity>
+    <TouchableOpacity style={styles.containerButton} onPress={props.onPress}>
+        <Ionicons name={props.name} size={35} color='white'></Ionicons>
         <Text style={styles.buttonText}>{props.text}</Text>
-    </View>
+    </TouchableOpacity>
   )
 }
 
 const styles = StyleSheet.create({
     containerButton: {
-        width: 100,
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-
-    buttonIcon: {
+        position: 'absolute',
+        bottom: 20,
+        right: 10,
+        width: '40%',
+        height: '10%',
         backgroundColor: '#2C363F',
-        width: 80,
-        height: 80,
+        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 40,
+        justifyContent: 'space-evenly',
+        borderRadius: 15,
     },
 
     buttonText: {
-        fontSize: 13,
+        fontSize: 14,
         textAlign: 'center',
         fontWeight: 'bold',
-        marginTop: 10,
-        color: 'gray',
+        color: 'white',
     },
 })

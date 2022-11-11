@@ -21,7 +21,6 @@ export default function Home() {
     }
 
     async function getCardByUser() {
-
         const res = await api.get(`/card.json?auth=${token}`)
         const data = await res.data
         const cards = Object.keys(data)
@@ -35,21 +34,30 @@ export default function Home() {
         setCardList(cards)
     }
 
-    function showCards() {
+    function deleteCard(id) {
+        api.delete(`/card/${id}.json?auth=${token}`)
+        .then(() => {
+            alert('Cartão deletado com sucesso!')
+            getCardByUser()
+        })
+        .catch(() => {
+            alert('Erro ao deletar cartão!')
+        })
+    }
+
+    function Item(props) {
         return (
-            <FlatList
-                data={cardList}
-                keyExtractor={item => item.id}
-                renderItem={({item}) => (
-                    <View style={styles.cardContainer}>
-                        <Text style={styles.cardText}>Cartão: {item.id}</Text>
-                        <Text style={styles.cardText}>Cartão: {item.cardNumber}</Text>
-                        <Text style={styles.cardText}>Nome: {item.name}</Text>
-                        <Text style={styles.cardText}>Validade: {item.dueDate}</Text>
-                        <Text style={styles.cardText}>CVV: {item.cvv}</Text>
-                    </View>
-                )}
-            />
+            <TouchableOpacity style={styles.cardContainer} >
+                <Text style={styles.cardText}>{props.item.cardNumber}</Text>
+                <Text style={styles.cardText}>{props.item.nameUser}</Text>
+                <Text style={styles.cardText}>{props.item.dueDate}</Text>
+                <Text style={styles.cardText}>{props.item.cvv}</Text>
+                <TouchableOpacity style={styles.button} onPress={
+                    () => deleteCard(props.item.id)
+                }>
+                    <Text style={styles.buttonText}>Excluir</Text>
+                </TouchableOpacity>
+            </TouchableOpacity>
         )
     }
 
@@ -63,14 +71,15 @@ export default function Home() {
                 <Text style={styles.welcomeText}>Olá,</Text>
                 <Text style={styles.welcomeName}>{userName}</Text>
             </View>
-            <View style={styles.containerFunctions}>
-                <View style={styles.containerButtons}>
-                    <FunctionButton name="card-outline" text="Meus cartões"/>
-                    <FunctionButton name="add-circle-outline" text="Adicionar cartões" onPress={navigateToAddPayment}/>
-                </View>
-            </View>
-            <View style={{flex: 1}}>
-                {showCards()}
+            <View style={styles.containerCards}>
+                <FlatList
+                    data={cardList} renderItem={(params)=> {
+                        return (
+                            <Item {...params}/>
+                        )
+                    }} 
+                />
+                <FunctionButton name="add-circle-outline" text="Adicionar cartão" onPress={navigateToAddPayment}/>
             </View>
         </View>
     )
@@ -101,18 +110,22 @@ const styles = StyleSheet.create({
         fontWeight: '500',
     },
 
-    containerFunctions: {
+    containerCards: {
+        backgroundColor: 'white',
         borderTopLeftRadius: 25,
         borderTopRightRadius: 25,
-        flex: 3,
-        backgroundColor: 'white',
+        flex: 5,
         width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 
-    containerButtons: {
-        paddingTop: 30,
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-    },  
+    cardContainer: {
+        marginTop: 30,
+        width: 350,
+        height: 100,
+        justifyContent: 'center',
+        borderRadius: 15,
+        borderWidth: 1,
+    },
 })

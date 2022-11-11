@@ -53,7 +53,7 @@ export default function AddPayment() {
                 <TextInput placeholder='Numero de cartão' style={styles.input} value={cardNumber} onChangeText={setCardNumber}></TextInput>
                 <TextInput placeholder='Validade' style={styles.input} value={dueDate} onChangeText={setDueDate}></TextInput>
                 <TextInput placeholder='CVV' style={styles.input} value={cvv} onChangeText={setCvv}></TextInput>
-                <DefaultButton name='Adicionar Cartão' onPress={addCard}/>
+                <DefaultButton name='Salvar' onPress={addCard}/>
             </View>
         </View>
     </View>
