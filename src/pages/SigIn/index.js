@@ -1,9 +1,11 @@
 import { View, Text, StyleSheet, TextInput, Image, SafeAreaView } from 'react-native'
-import React, {useState} from 'react'
+import React, {useState, useContext} from 'react'
 import { useNavigation } from '@react-navigation/core'
 import SocialButton from '../../components/SocialButton'
 import DefaultButton from '../../components/DefaultButton'
 import axios from 'axios'
+
+import { AuthContext } from '../../context/context'
 
 const api = axios.create({
     baseURL: 'https://bus-app-challenge-default-rtdb.firebaseio.com/'
@@ -11,14 +13,13 @@ const api = axios.create({
 
 export default function SigIn() {
 
-    const navigation = useNavigation()
-
     async function logIn() {
         try {
             const response = await api.get('/user.json')
             const data = response.data
             const user = Object.values(data).filter(user => user.email === email && user.password === password)
             if(user.length > 0) {
+                setUser(user[0])
                 navigation.navigate('Home')
             } else {
                 alert('Usuário não encontrado!')
@@ -27,9 +28,10 @@ export default function SigIn() {
         catch(err) {
             console.log(err);
         }
-    
     }
 
+    const navigation = useNavigation()
+    const {setUser} = useContext(AuthContext)
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 

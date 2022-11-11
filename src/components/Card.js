@@ -13,7 +13,7 @@ export default function Card(props) {
                 <Text style={styles.textName}>{props.name}</Text>
             </View>
             <View style={styles.cardDueDate}>
-                {props.validity ? <Text style={styles.titlename}>Vencimento</Text> : false}
+                {props.dueDate ? <Text style={styles.titlename}>Vencimento</Text> : false}
                 <Text style={styles.textDueDate}>{props.dueDate}</Text>
             </View>
         </View>

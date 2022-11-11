@@ -1,23 +1,34 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, {useContext} from 'react'
 import FunctionButton from '../../components/FunctionButton'
+import { useNavigation } from '@react-navigation/core'
+
+import { AuthContext } from '../../context/context'
 
 export default function Home() {
-  return (
-    <View style={styles.container}>
-        <View style={styles.containerWelcome}>
-            <Text style={styles.welcomeText}>Olá,</Text>
-            <Text style={styles.welcomeName}>Ricardo Costa</Text>
-        </View>
-        <View style={styles.containerFunctions}>
-            <View style={styles.containerButtons}>
-                <FunctionButton name="card-outline" text="Meus cartões"/>
-                <FunctionButton name="add-circle-outline" text="Adicionar cartões"/>
-                <FunctionButton name="bus-outline" text="Favoritos"/>
+
+    const navigation = useNavigation();
+    const {user} = useContext(AuthContext)
+
+    function navigateToAddPayment() {
+        navigation.navigate('AddPayment')
+    }
+
+    return (
+        <View style={styles.container}>
+            <View style={styles.containerWelcome}>
+                <Text style={styles.welcomeText}>Olá,</Text>
+                <Text style={styles.welcomeName}>{user.name}</Text>
+            </View>
+            <View style={styles.containerFunctions}>
+                <View style={styles.containerButtons}>
+                    <FunctionButton name="card-outline" text="Meus cartões"/>
+                    <FunctionButton name="add-circle-outline" text="Adicionar cartões" onPress={navigateToAddPayment}/>
+                    <FunctionButton name="bus-outline" text="Favoritos"/>
+                </View>
             </View>
         </View>
-    </View>
-  )
+    )
 }
 
 const styles = StyleSheet.create({

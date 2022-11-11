@@ -5,7 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 export default function FunctionButton(props) {
   return (
     <View style={styles.containerButton}>
-        <TouchableOpacity style={styles.buttonIcon}>
+        <TouchableOpacity style={styles.buttonIcon} onPress={props.onPress}>
             <Ionicons name={props.name} size={32} color='white'></Ionicons>
         </TouchableOpacity>
         <Text style={styles.buttonText}>{props.text}</Text>
