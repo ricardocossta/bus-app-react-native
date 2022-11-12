@@ -31,7 +31,7 @@ export default function AddPayment() {
                 })
                 .then(() => {
                     alert('Cartão adicionado com sucesso!')
-                    navigation.navigate('Home')
+                    navigation.push('Home')
                 })
                 .catch(() => {
                     alert('Erro ao adicionar cartão!')
@@ -53,7 +53,7 @@ export default function AddPayment() {
                 })
                 .then(() => {
                     alert('Cartão editado com sucesso!')
-                    navigation.navigate('Home')
+                    navigation.push('Home')
                 })
                 .catch(() => {
                     alert('Erro ao editar cartão!')
@@ -75,7 +75,7 @@ export default function AddPayment() {
         </View>
         <View style={styles.formContainer}>
             <View style={styles.form}>
-                <TextInput placeholder='Nome' style={styles.input} value={cardName} onChangeText={setCardName}></TextInput>
+                <TextInput placeholder='Nome no cartão' style={styles.input} value={cardName} onChangeText={setCardName}></TextInput>
                 <TextInput placeholder='Numero de cartão' style={styles.input} value={cardNumber} onChangeText={setCardNumber}></TextInput>
                 <TextInput placeholder='Validade' style={styles.input} value={dueDate} onChangeText={setDueDate}></TextInput>
                 <TextInput placeholder='CVV' style={styles.input} value={cvv} onChangeText={setCvv}></TextInput>

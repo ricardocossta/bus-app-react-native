@@ -28,15 +28,19 @@ export default function Home() {
     async function getCardByUser() {
         const res = await api.get(`/card.json?auth=${token}`)
         const data = await res.data
-        const cards = Object.keys(data)
-        .filter((key) => data[key].idUser === userId)
-        .map((key) => {
-            return {
-                id: key,
-                ...data[key]
-            }
-        })
-        setCardList(cards)
+        if (data !== null) {
+            const cards = Object.keys(data)
+            .filter((key) => data[key].idUser === userId)
+            .map((key) => {
+                return {
+                    id: key,
+                    ...data[key]
+                }
+            })
+            setCardList(cards)
+        } else {
+            setCardList([])
+        }
     }
 
     function deleteCard(id) {
@@ -61,17 +65,26 @@ export default function Home() {
 
     function Item(props) {
         return (
-            <TouchableOpacity style={styles.cardContainer} onPress={() => editCard(props.item)}>
-                <Text style={styles.cardText}>{props.item.cardNumber}</Text>
-                <Text style={styles.cardText}>{props.item.cardName}</Text>
-                <Text style={styles.cardText}>{props.item.dueDate}</Text>
-                <Text style={styles.cardText}>{props.item.cvv}</Text>
-                <TouchableOpacity style={styles.button} onPress={
-                    () => deleteCard(props.item.id)
-                }>
-                    <Text style={styles.buttonText}>Excluir</Text>
-                </TouchableOpacity>
-            </TouchableOpacity>
+            <View style={styles.cardContainer}>
+                <View style={styles.containerInfo}>
+                    <Text style={styles.cardText}>Numero: {props.item.cardNumber}</Text>
+                    <Text style={styles.cardText}>Nome: {props.item.cardName}</Text>
+                    <Text style={styles.cardText}>Expiração: {props.item.dueDate}</Text>
+                    <Text style={styles.cardText}>CVV: {props.item.cvv}</Text>
+                </View>
+                <View style={styles.containerButtons}>
+                    <TouchableOpacity style={styles.buttonDelete} onPress={
+                        () => deleteCard(props.item.id)
+                    }>
+                        <Text style={styles.buttonTextDelete}>Excluir</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.buttonEdit} onPress={
+                        () => editCard(props.item)
+                    }>
+                        <Text style={styles.buttonTextEdit}>Editar</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
         )
     }
 
@@ -110,8 +123,8 @@ const styles = StyleSheet.create({
     containerWelcome: {
         flex: 1,
         width: '100%',
-        paddingTop: 40,
-        paddingLeft: 40,
+        paddingTop: 60,
+        paddingLeft: 30,
     },
 
     welcomeText: {
@@ -135,11 +148,60 @@ const styles = StyleSheet.create({
     },
 
     cardContainer: {
+        flex: 1,
+        flexDirection: 'row',
         marginTop: 30,
         width: 350,
         height: 100,
-        justifyContent: 'center',
-        borderRadius: 15,
+        borderTopLeftRadius: 25,
+        borderBottomLeftRadius: 25,
         borderWidth: 1,
     },
+
+    containerInfo: {
+        flex: 4,
+        justifyContent: 'center',
+        marginLeft: 20,
+    },
+
+    cardText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+
+    containerButtons: {
+        flex: 1,
+        backgroundColor: 'white',
+    },
+
+    buttonDelete: {
+        flex: 1,
+        backgroundColor: '#e63946',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderLeftWidth: 1,
+    },
+
+    buttonTextDelete: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+
+    buttonEdit: {
+        flex: 1,
+        backgroundColor: '#2C363F',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderLeftWidth: 1,
+    },
+
+    buttonTextEdit: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+
+
+
 })

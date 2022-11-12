@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, TextInput, Image, SafeAreaView } from 'react-native'
 import React, {useState, useContext} from 'react'
 import DefaultButton from '../../components/DefaultButton'
+import { useNavigation } from '@react-navigation/core'
 import axios from 'axios'
 
 import { AuthContext } from '../../context/context'
@@ -11,6 +12,7 @@ const autApi = axios.create({
 
 export default function Register() {
 
+    const navigation = useNavigation();
     const {API_KEY} = useContext(AuthContext)
     const [email, setEmail] = useState("")
     const [name, setName] = useState("")
@@ -27,16 +29,17 @@ export default function Register() {
                 returnSecureToken: true
             })
             .then(res => {
-                console.warn(res.data)
                 alert('Usuário cadastrado com sucesso!')
+                navigation.push('SigIn')
             })
             .catch(err => {
-                console.warn(err)
+                console.log(err)
                 alert('Erro ao cadastrar usuário!')
                 
             })
             .finally(() => {
                 setEmail('')
+                setName('')
                 setPassword('')
             })
         }
