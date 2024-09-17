@@ -1,6 +1,6 @@
 <div align="center">
-  <h1>Bus APP</h1>
-  <h3>Aplicação react native, realizando CRUD e Autenticação usando Firebase</h3>
+  <h1>Bus App</h1>
+  <h3>A React Native app for managing cards and authentication with Firebase</h3>
   <br>
 
   ![image](https://user-images.githubusercontent.com/72779069/230438860-dc90763a-7e20-4fd4-bc6e-bbd8712fbee5.png)
